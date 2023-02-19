@@ -1,0 +1,7 @@
+string name
+float64 average_duration
+float64 max_duration
+float64 min_duration
+uint16 num_of_calls
+uint16 num_of_errors
+bool active

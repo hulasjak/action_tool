@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+  <!-- Launch node -->
+  <node name="action_tool" pkg="action_tool" type="action_tool" output="screen"/>
+  <node name="monitor_node" pkg="action_tool" type="monitor_node" output="screen"/>
+
+
+</launch>

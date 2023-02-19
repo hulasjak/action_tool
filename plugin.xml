@@ -1,0 +1,20 @@
+<library path="lib/libaction_tool">
+    <!-- Note that the class name must be unique, else ROS would be able to find it -->
+    <!-- The class name also need to follow the "namespace/class_name" convention in order to work properly -->
+    <!-- Note that base_class_type changes according to cpp or py -->
+    <class name="action_tool/ActionTool" type="action_tool::ActionTool" base_class_type="rqt_gui_cpp::Plugin">
+        <description>
+            Test
+        </description>
+        <qtgui>
+        <group>
+            <label>Topics</label>
+            <icon type="theme">folder</icon>
+            <statustip></statustip>
+        </group>
+        <label>Test</label>
+        <icon type="theme">applications-graphics</icon>
+        <statustip>test.</statustip>
+        </qtgui>
+    </class>
+</library>

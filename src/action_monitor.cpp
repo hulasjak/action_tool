@@ -48,7 +48,6 @@ void ActionMonitor::callback(const actionlib_msgs::GoalStatusArray &status)
                 active_ = false;
                 ++number_of_calls_;
                 update_durations();
-                std::cout << "num of calls" << number_of_calls_ << "\n";
             }
             break;
 
@@ -57,7 +56,6 @@ void ActionMonitor::callback(const actionlib_msgs::GoalStatusArray &status)
             {
                 active_ = false;
                 ++number_of_errors_;
-                std::cout << "num of errors" << number_of_errors_ << "\n";
             }
             break;
 

@@ -29,31 +29,26 @@ namespace action_tool
         // add widget to the user interface
         context.addWidget(widget_.get());
 
-        // Define ROS publishers
-        // buttton_1_pub_ = getNodeHandle().advertise<std_msgs::Bool>("button_1_topic", 1);
-        // buttton_2_pub_ = getNodeHandle().advertise<std_msgs::Bool>("button_2_topic", 1);
-
-        // // Declare ROS msg_
         // msg_.data = true;
         _subscriber = getNodeHandle().subscribe("/action_monitor", 1, &ActionTool::callback, this);
-        // Connect Qt Widgets
-        // connect(ui_.helloButton, SIGNAL(pressed()), this, SLOT(button_callback_()));
-        // connect(ui_.pushButton_2, SIGNAL(pressed()), this, SLOT(button_2_callback_()));
 
         // QStandardItemModel(int rows, int columns, QObject * parent = 0)
-        model_ = std::make_shared<QStandardItemModel>(1, 4, this);
+        // model_ = std::make_shared<QStandardItemModel>(1, 4, this);
 
         // Attach the model to the view
 
-        ui_.tableView->verticalHeader()->setVisible(false);
-        ui_.tableView->setSortingEnabled(true);
-        ui_.tableView->setShowGrid(false);
+        ui_.table->verticalHeader()->setVisible(false);
+        ui_.table->setSortingEnabled(false);
+        ui_.table->setShowGrid(false);
+        ui_.table->setColumnCount(7);
+        ui_.table->setRowCount(1);
         QStringList horizontalHeader;
         horizontalHeader.append({"Actions", "Active", "Num. succeced", "Num. of errors", "Average duration", "Min duration", "Max duration"});
-        model_->setHorizontalHeaderLabels(horizontalHeader);
-        ui_.tableView->resizeColumnsToContents();
-        ui_.tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-        ui_.tableView->setModel(model_.get());
+        ui_.table->setHorizontalHeaderLabels(horizontalHeader);
+        ui_.table->resizeColumnsToContents();
+        ui_.table->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        ui_.table->setSelectionBehavior(QAbstractItemView::SelectRows);
+        // ui_.tableView->setModel(model_.get());
     }
 
     void ActionTool::shutdownPlugin()
@@ -64,56 +59,48 @@ namespace action_tool
         qt_gui_cpp::Settings &plugin_settings,
         qt_gui_cpp::Settings &instance_settings) const
     {
-        ;
     }
 
     void ActionTool::restoreSettings(
         const qt_gui_cpp::Settings &plugin_settings,
         const qt_gui_cpp::Settings &instance_settings)
     {
-        ;
     }
 
     void ActionTool::callback(const action_tool::ActionInfoArray &info)
     {
-        // const std::lock_guard<std::mutex> lock(mutex);
-        // name = info.action_info_list[0].name;
-        // QModelIndex index = model_->index(0, 0, QModelIndex());
-        // model_->setData(index, name.c_str());
-        // auto model = std::make_shared<QStandardItemModel>(1, 4, this);
-        // ui_.tableView->setModel(model.get());
-        // QString name;
-        // name.resize(info.action_info_list[0].name.size());
-        // std::copy(info.action_info_list[0].name.begin(), info.action_info_list[0].name.end(), name.begin());
 
-        if (model_->rowCount() < info.action_info_list.size())
+        ui_.table->blockSignals(true);
+        if (ui_.table->rowCount() < info.action_info_list.size())
         {
-            model_->insertRow(model_->rowCount(QModelIndex()));
+            ui_.table->insertRow(ui_.table->rowCount());
         }
         int row = 0;
         for (auto &&action_info : info.action_info_list)
         {
             int col = 0;
-            QModelIndex index = model_->index(row, col++, QModelIndex());
-            auto name = action_info.name.c_str();
-            model_->setData(index, name);
-            index = model_->index(row, col++, QModelIndex());
-            model_->setData(index, action_info.active);
-            index = model_->index(row, col++, QModelIndex());
-            model_->setData(index, action_info.num_of_calls);
-            index = model_->index(row, col++, QModelIndex());
-            model_->setData(index, action_info.num_of_errors);
-            index = model_->index(row, col++, QModelIndex());
-            model_->setData(index, action_info.average_duration);
-            index = model_->index(row, col++, QModelIndex());
-            model_->setData(index, action_info.min_duration);
-            index = model_->index(row, col++, QModelIndex());
-            model_->setData(index, action_info.max_duration);
+
+            ui_.table->setItem(row, col++, new QTableWidgetItem(action_info.name.c_str()));
+            // Create an element, which will serve as a checkbox
+            QTableWidgetItem *item = new QTableWidgetItem();
+            item->data(Qt::CheckStateRole);
+            item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+            if (action_info.active)
+            {
+                item->setCheckState(Qt::Checked);
+            }
+            else
+            {
+                item->setCheckState(Qt::Unchecked);
+            }
+            ui_.table->setItem(row, col++, item);
+            ui_.table->setItem(row, col++, new QTableWidgetItem(std::to_string(action_info.num_of_calls).c_str()));
+            ui_.table->setItem(row, col++, new QTableWidgetItem(std::to_string(action_info.num_of_errors).c_str()));
+            ui_.table->setItem(row, col++, new QTableWidgetItem(std::to_string(action_info.average_duration).c_str()));
+            ui_.table->setItem(row, col++, new QTableWidgetItem(std::to_string(action_info.min_duration).c_str()));
+            ui_.table->setItem(row, col++, new QTableWidgetItem(std::to_string(action_info.max_duration).c_str()));
             ++row;
         }
-
-        // QModelIndex index = model_->index(0, 0, QModelIndex());
-        // 0 for all data
     }
 
 } // namespace action_tool

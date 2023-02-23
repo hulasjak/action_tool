@@ -20,7 +20,6 @@ std::vector<std::string> get_active_actions()
         if (std::string::npos != info.name.find(status_string))
         {
             actions.push_back(info.name);
-            // std::cout << "action " << info.name << "\n";
         }
     }
     return actions;
@@ -46,12 +45,6 @@ int main(int argc, char **argv)
         std::set_difference(actions.begin(), actions.end(), started_actions.begin(), started_actions.end(),
                             std::back_inserter(not_stared_actions));
 
-        if (not_stared_actions.size() > 0)
-        {
-            std::cout << "not started action " << not_stared_actions[0] << "\n";
-            std::cout << "action1 " << actions[0] << "\n";
-            std::cout << "true? " << std::to_string(actions[0] == not_stared_actions[0]) << "\n";
-        }
         for (auto &&action : not_stared_actions)
         {
             ActionMonitor new_monitor;
@@ -60,7 +53,6 @@ int main(int argc, char **argv)
             monitors.insert({new_monitor.name_, new_monitor});
             subs.push_back(nh.subscribe(action, 1, &ActionMonitor::callback, &monitors[new_monitor.name_]));
             started_actions.push_back(action);
-            std::cout << "added action " << action << "\n";
         }
 
         for (auto &&action : monitors)

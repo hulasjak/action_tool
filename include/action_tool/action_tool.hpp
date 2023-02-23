@@ -38,12 +38,9 @@ namespace action_tool
     private:
         Ui::action_tool ui_;
         std::shared_ptr<QWidget> widget_;
-        std::shared_ptr<QStandardItemModel> model_;
+        // std::shared_ptr<QStandardItemModel> model_;
 
     protected:
-        // ROS declaration
-        // ros::Publisher buttton_1_pub_;
-        // ros::Publisher buttton_2_pub_;
         ros::Subscriber _subscriber;
         void callback(const action_tool::ActionInfoArray &status);
     };

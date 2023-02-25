@@ -29,13 +29,7 @@ namespace action_tool
         // add widget to the user interface
         context.addWidget(widget_.get());
 
-        // msg_.data = true;
         _subscriber = getNodeHandle().subscribe("/action_monitor", 1, &ActionTool::callback, this);
-
-        // QStandardItemModel(int rows, int columns, QObject * parent = 0)
-        // model_ = std::make_shared<QStandardItemModel>(1, 4, this);
-
-        // Attach the model to the view
 
         ui_.table->verticalHeader()->setVisible(false);
         ui_.table->setSortingEnabled(false);
@@ -48,7 +42,6 @@ namespace action_tool
         ui_.table->resizeColumnsToContents();
         ui_.table->setEditTriggers(QAbstractItemView::NoEditTriggers);
         ui_.table->setSelectionBehavior(QAbstractItemView::SelectRows);
-        // ui_.tableView->setModel(model_.get());
     }
 
     void ActionTool::shutdownPlugin()
@@ -70,7 +63,6 @@ namespace action_tool
     void ActionTool::callback(const action_tool::ActionInfoArray &info)
     {
 
-        ui_.table->blockSignals(true);
         if (ui_.table->rowCount() < info.action_info_list.size())
         {
             ui_.table->insertRow(ui_.table->rowCount());

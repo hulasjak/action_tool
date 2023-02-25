@@ -31,14 +31,9 @@ namespace action_tool
             const qt_gui_cpp::Settings &plugin_settings,
             const qt_gui_cpp::Settings &instance_settings);
 
-        // Comment in to signal that the plugin has a way to configure it
-        // bool hasConfiguration() const;
-        // void triggerConfiguration();
-
     private:
         Ui::action_tool ui_;
         std::shared_ptr<QWidget> widget_;
-        // std::shared_ptr<QStandardItemModel> model_;
 
     protected:
         ros::Subscriber _subscriber;
